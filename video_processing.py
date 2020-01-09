@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-import Projekat3.image_processing as ip
+import image_processing as ip
 import matplotlib.pyplot as plt
 
 # (180, 113) - (470, 92)
