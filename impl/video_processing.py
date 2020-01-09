@@ -1,7 +1,8 @@
-import numpy as np
 import cv2
-import image_processing as ip
 import matplotlib.pyplot as plt
+import numpy as np
+
+from impl import image_processing as ip
 
 # (180, 113) - (470, 92)
 # (22, 62) - (309, 41)

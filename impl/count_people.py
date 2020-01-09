@@ -1,4 +1,5 @@
-import video_processing as vp
+from impl import video_processing as vp
+
 
 # Problematicni - video 4, video 2, video 5
 
