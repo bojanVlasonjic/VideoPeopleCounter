@@ -1,7 +1,9 @@
 from impl import video_processing as vp
 
-
 # Problematicni - video 4, video 2, video 5
+
+RESULT_PATH = "../data/res.txt"
+MY_RESULT_PATH = "../data/myres.txt"
 
 
 def load_true_values(file_path):
@@ -41,17 +43,18 @@ def get_previous_mae(file_path):
 
 if __name__ == '__main__':
 
-    people_per_video = load_true_values('data/res.txt')
+    people_per_video = load_true_values(RESULT_PATH)
     predicted_people = []
 
     for video_name in people_per_video.keys():
-        predicted_people.append(vp.process_video('data/' + video_name))
+        predicted_people.append(vp.process_video('../data/' + video_name))
 
-    print('Result: ', predicted_people)
+    print('Pred: ', predicted_people)
+    print('Real: ', list(people_per_video.values()))
+
     mae = calc_min_abs_error(list(people_per_video.values()), predicted_people)
-
     print('Min absolute error: ', mae)
     print('Success: ', mae < 4.6)
 
-    print("Improvement: ", mae < get_previous_mae('data/myres.txt'))
-    memorize_mae('data/myres.txt', mae)
+    print("Improvement: ", mae < get_previous_mae(MY_RESULT_PATH))
+    memorize_mae(MY_RESULT_PATH, mae)

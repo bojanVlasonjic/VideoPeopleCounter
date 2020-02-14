@@ -119,7 +119,6 @@ def process_video(video_path):
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # plt.imshow(frame_gray, "gray")
         frame_bin = ip.adaptive_threshold_gaus(frame_gray, 11, 3)
-        # plt.imshow(frame_bin, "gray")
 
         img = frame.copy()
         rectangles = ip.get_bounding_rects(img, frame_bin, 5, 5, 80, 80)
@@ -129,8 +128,9 @@ def process_video(video_path):
             x, y, w, h = rectangle
 
             if (line_left_edge <= x <= line_right_edge) and detect_cross(x, y, k, n):
-                #ip.display_image(frame_bin, video_path, 2)
-                #ip.display_image(img, video_path, 2)
+                # ip.display_image(frame_bin, video_path, 2)
+                # ip.display_image(img, video_path, 2)
+                print('Found person in frame: ', frame_num)
                 sum_of_people += 1
 
     print('People found: ', sum_of_people)

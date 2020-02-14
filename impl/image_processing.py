@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -22,6 +23,16 @@ def adaptive_threshold_gaus(image_gs, block_size=3, constant=5, inv=False):
     if inv:
         return cv2.adaptiveThreshold(image_gs, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, block_size, constant)
     return cv2.adaptiveThreshold(image_gs, 255,  + cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, block_size, constant)
+
+
+def dilate(image, kernel_size=3, iter_num=1):
+    kernel = np.ones((kernel_size, kernel_size))
+    return cv2.dilate(image, kernel, iterations=iter_num)
+
+
+def erode(image, kernel_size=3, iter_num=1):
+    kernel = np.ones((kernel_size, kernel_size))
+    return cv2.erode(image, kernel, iterations=iter_num)
 
 
 def display_image(image, title="", wait_time=3, color=False):
