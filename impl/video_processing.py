@@ -76,19 +76,18 @@ def detect_cross_with_tolerance(x, y, k, n):
 
 
 def process_video(video_path):
-    # procesiranje jednog videa
     # priprema pomocnih promenljivih
     sum_of_people = 0
     k = 0
     n = 0
 
-    # ucitavanje videa
+    # loading video
     frame_num = 0
     cap = cv2.VideoCapture(video_path)
     cap.set(1, frame_num)  # indeksiranje frejmova
 
     print(video_path)
-    # analiza videa frejm po frejm
+    # analyzing video frame per frame
     while True:
         frame_num += 1
         ret_val, frame = cap.read()
@@ -121,7 +120,7 @@ def process_video(video_path):
         frame_bin = ip.adaptive_threshold_gaus(frame_gray, 11, 3)
 
         img = frame.copy()
-        rectangles = ip.get_bounding_rects(img, frame_bin, 5, 5, 80, 80)
+        rectangles = ip.get_bounding_rects(img, frame_bin, 3, 3, 120, 120)
         #plt.imshow(img)
 
         for rectangle in rectangles:
