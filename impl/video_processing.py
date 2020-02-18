@@ -10,8 +10,6 @@ left_edge_predicted = (22, 62)  # (x1, y1)
 right_edge_predicted = (309, 41)  # (x2, y2)
 
 
-
-
 def find_carpet_line(lines_in_image):
 
     coord_divergence = [0, 0, 0, 0]  # (x1, y1, x2, y2)
@@ -60,7 +58,7 @@ def detect_line(img):
 
 def detect_cross(x, y, k, n):
 
-    tolerance_level = 5  # line thickness in px
+    tolerance_level = 5 # line thickness in px
 
     if detect_cross_with_tolerance(x-tolerance_level, y-tolerance_level, k, n) or \
             detect_cross_with_tolerance(x+tolerance_level, y+tolerance_level, k, n) or \
@@ -90,7 +88,7 @@ def locate_people_on_carpet(frame, people_on_carpet):
     for rectangle in rectangles:
         x, y, w, h = rectangle
 
-        if 92 < x < 235 and 70 < y < 400:
+        if 92 < x < 240 and 70 < y < 400:
             people_on_carpet[(x, y)] = (w, h)
 
     return people_on_carpet
