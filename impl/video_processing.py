@@ -4,12 +4,10 @@ import numpy as np
 
 from impl import image_processing as ip
 
-# (180, 113) - (470, 92)
-# (22, 62) - (309, 41)
 left_edge_predicted = (22, 62)  # (x1, y1)
 right_edge_predicted = (309, 41)  # (x2, y2)
 
-SHOW_VIDEO = False
+SHOW_VIDEO = True
 
 
 def find_carpet_line(lines_in_image):
@@ -127,18 +125,19 @@ def process_video(video_path):
 
         if frame_num == 1:  # ako je prvi frejm, detektuj liniju
             people_on_carpet = locate_people_on_carpet(previous_frame, people_on_carpet)
+
             line_coords = detect_line(frame)
             line_left_edge = line_coords[0]
             line_right_edge = line_coords[2]
 
-            # odredjivanje parametara jednacine prave y = kx + n
+            # odredjivanje parametara jednacine prave y = kx + ns
             k = (float(line_coords[3]) - float(line_coords[1])) / (float(line_coords[2]) - float(line_coords[0]))
             n = k * (float(-line_coords[0])) + float(line_coords[1])
+
             print("Detected line:")
             print("k = ", k)
             print("n = ", n)
 
-        cv2.GaussianBlur(frame, (5, 3), 1)
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         frame_bin = ip.adaptive_threshold_gaus(frame_gray, 11, 3)
 
@@ -146,7 +145,9 @@ def process_video(video_path):
         rectangles = ip.get_bounding_rects(img, frame_bin, 5, 5, 120, 120)
 
         if SHOW_VIDEO:
-            ip.show_image(img)
+            cv2.imshow('frame', img)
+            if cv2.waitKey(15) & 0xFF == ord('q'):
+                break
 
         for rectangle in rectangles:
             x, y, w, h = rectangle

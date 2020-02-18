@@ -52,7 +52,3 @@ def display_image(image, title="", wait_time=3, color=False):
 
     plt.pause(wait_time)
 
-
-def show_image(frame):
-    if cv2.waitKey(15) & 0xFF == ord('q'):
-        cv2.imshow('frame', frame)
