@@ -9,6 +9,8 @@ from impl import image_processing as ip
 left_edge_predicted = (22, 62)  # (x1, y1)
 right_edge_predicted = (309, 41)  # (x2, y2)
 
+SHOW_VIDEO = False
+
 
 def find_carpet_line(lines_in_image):
 
@@ -136,17 +138,15 @@ def process_video(video_path):
             print("k = ", k)
             print("n = ", n)
 
-            # coloring line
-            # cv2.line(frame, (line_coords[0], line_coords[1]), (line_coords[2], line_coords[3]), (255, 0, 0), 2)
-            # ip.display_image(frame, '', 1)
-
+        cv2.GaussianBlur(frame, (5, 3), 1)
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # plt.imshow(frame_gray, "gray")
         frame_bin = ip.adaptive_threshold_gaus(frame_gray, 11, 3)
 
         img = frame.copy()
         rectangles = ip.get_bounding_rects(img, frame_bin, 5, 5, 120, 120)
-        #plt.imshow(img)
+
+        if SHOW_VIDEO:
+            ip.show_image(img)
 
         for rectangle in rectangles:
             x, y, w, h = rectangle
