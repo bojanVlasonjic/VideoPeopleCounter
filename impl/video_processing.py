@@ -58,7 +58,7 @@ def detect_line(img):
 
 def detect_cross(x, y, k, n):
 
-    tolerance_level = 5  # line thickness in px
+    tolerance_level = 5 # line thickness in px
 
     if detect_cross_with_tolerance(x-tolerance_level, y-tolerance_level, k, n) or \
             detect_cross_with_tolerance(x+tolerance_level, y+tolerance_level, k, n) or \
@@ -72,11 +72,30 @@ def detect_cross(x, y, k, n):
 def detect_cross_with_tolerance(x, y, k, n):
 
     yy = k * x + n
-    return 0 <= (yy - y) < 1.12
+    return 0 <= (yy - y) < 1.09
+
+
+def locate_people_on_carpet(frame, people_on_carpet):
+
+    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    frame_bin = ip.adaptive_threshold_gaus(frame_gray, 11, 3)
+
+    img = frame.copy()
+    rectangles = ip.get_bounding_rects(img, frame_bin, 10, 10, 80, 80)
+
+    # ip.display_image(img)
+
+    for rectangle in rectangles:
+        x, y, w, h = rectangle
+
+        if 92 < x < 240 and 70 < y < 400:
+            people_on_carpet[(x, y)] = (w, h)
+
+    return people_on_carpet
 
 
 def process_video(video_path):
-    # priprema pomocnih promenljivih
+
     sum_of_people = 0
     k = 0
     n = 0
@@ -86,6 +105,9 @@ def process_video(video_path):
     cap = cv2.VideoCapture(video_path)
     cap.set(1, frame_num)  # indeksiranje frejmova
 
+    previous_frame = None
+    people_on_carpet = {}
+
     print(video_path)
     # analyzing video frame per frame
     while True:
@@ -94,12 +116,15 @@ def process_video(video_path):
 
         # ako frejm nije zahvacen
         if not ret_val:
+            people_on_carpet = locate_people_on_carpet(previous_frame, people_on_carpet)
             break
 
         # isecanje frejma
         frame = frame[50:450, 160:500]
+        previous_frame = frame
 
         if frame_num == 1:  # ako je prvi frejm, detektuj liniju
+            people_on_carpet = locate_people_on_carpet(previous_frame, people_on_carpet)
             line_coords = detect_line(frame)
             line_left_edge = line_coords[0]
             line_right_edge = line_coords[2]
@@ -120,7 +145,7 @@ def process_video(video_path):
         frame_bin = ip.adaptive_threshold_gaus(frame_gray, 11, 3)
 
         img = frame.copy()
-        rectangles = ip.get_bounding_rects(img, frame_bin, 3, 3, 120, 120)
+        rectangles = ip.get_bounding_rects(img, frame_bin, 5, 5, 120, 120)
         #plt.imshow(img)
 
         for rectangle in rectangles:
@@ -133,6 +158,9 @@ def process_video(video_path):
                 sum_of_people += 1
 
     print('People found: ', sum_of_people)
+    print('People who did not cross the line: ', len(people_on_carpet))
     print()
     cap.release()
-    return sum_of_people
+
+    return sum_of_people + len(people_on_carpet)
+

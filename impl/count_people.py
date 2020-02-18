@@ -1,6 +1,6 @@
 from impl import video_processing as vp
 
-# Problematicni - video 4, video 2, video 5
+# Problematicni - video 2, video 6, video 9, video 10
 
 RESULT_PATH = "../data/res.txt"
 MY_RESULT_PATH = "../data/myres.txt"
