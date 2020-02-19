@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import math
+from scipy.signal import convolve2d
 
 
 def get_bounding_rects(image_orig, image_bin, min_height=15, min_width=20, max_height=100, max_width=100):
@@ -52,3 +54,16 @@ def display_image(image, title="", wait_time=3, color=False):
 
     plt.pause(wait_time)
 
+
+def estimate_noise(I):
+
+  H, W = I.shape
+
+  M = [[1, -2, 1],
+       [-2, 4, -2],
+       [1, -2, 1]]
+
+  sigma = np.sum(np.sum(np.absolute(convolve2d(I, M))))
+  sigma = sigma * math.sqrt(0.5 * math.pi) / (6 * (W-2) * (H-2))
+
+  return sigma
